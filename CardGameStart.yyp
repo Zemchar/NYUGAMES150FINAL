@@ -45,6 +45,7 @@
     {"id":{"name":"sndCardMove","path":"sounds/sndCardMove/sndCardMove.yy",},},
     {"id":{"name":"oOutline","path":"objects/oOutline/oOutline.yy",},},
     {"id":{"name":"spr_outline","path":"sprites/spr_outline/spr_outline.yy",},},
+    {"id":{"name":"sprCollisionEnemy","path":"sprites/sprCollisionEnemy/sprCollisionEnemy.yy",},},
     {"id":{"name":"enums","path":"scripts/enums/enums.yy",},},
     {"id":{"name":"Slide_Electronic_02","path":"sounds/Slide_Electronic_02/Slide_Electronic_02.yy",},},
     {"id":{"name":"oDealer","path":"objects/oDealer/oDealer.yy",},},

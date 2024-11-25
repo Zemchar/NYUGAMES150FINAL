@@ -11,6 +11,7 @@
     {"name":"sndCardMove","order":1,"path":"sounds/sndCardMove/sndCardMove.yy",},
     {"name":"oOutline","order":3,"path":"objects/oOutline/oOutline.yy",},
     {"name":"spr_outline","order":2,"path":"sprites/spr_outline/spr_outline.yy",},
+    {"name":"sprCollisionEnemy","order":4,"path":"sprites/sprCollisionEnemy/sprCollisionEnemy.yy",},
     {"name":"Slide_Electronic_02","order":5,"path":"sounds/Slide_Electronic_02/Slide_Electronic_02.yy",},
     {"name":"sndWin","order":2,"path":"sounds/sndWin/sndWin.yy",},
     {"name":"scrTank","order":1,"path":"scripts/scrTank/scrTank.yy",},

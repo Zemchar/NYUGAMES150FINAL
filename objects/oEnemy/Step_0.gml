@@ -4,7 +4,10 @@ if(health > 0){
 
 	switch(state){
 		case eEnemyState.Attacking:
-			mp_potential_step(oTank.x, oTank.y, 1, false);
+			if(!targetCelPos.checkDefined()){
+				global.tank.getNearestCell(x, y);
+			}
+			mp_potential_step_object(targetCelPos.x, targetCelPos.y, 1, oEnemy);
 			
 		
 	}

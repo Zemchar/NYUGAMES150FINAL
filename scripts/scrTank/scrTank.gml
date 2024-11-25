@@ -38,6 +38,8 @@ function Tank(_obj) constructor{
 		for(var _r =0; _r<ds_grid_height(config); _r++){
 			for(var _c = 0; _c<ds_grid_width(config); _c++){
 				config[# _c, _r].draw(_c, _r)
+				config[# _c, _r].doActionOne();
+				config[# _c, _r].doActionTwo();
 			}
 		}
 
@@ -55,6 +57,22 @@ function Tank(_obj) constructor{
 		keyboard_check_pressed(ord("D"))*(wheelCount/weight)
 		]
 		return moveDirs
+	}
+	
+	function getNearestCell(xpos, ypos){
+		var closestDistance = point_distance(xpos, ypos, instance.x*global.blockSize*2.2, instance.y*global.blockSize*2.2);
+		var closestCell = [0, 0]
+		for(var _r =0; _r<ds_grid_height(config); _r++){
+			for(var _c = 0; _c<ds_grid_width(config); _c++){
+				if(config[# _c, _r].type != eComponentTypes.EMPTY){
+					if(point_distance(xpos, ypos, instance.x*global.blockSize*2.2+_c, instance.y*global.blockSize*2.2+_r)<closestDistance){
+						closestDistance = point_distance(xpos, ypos, (instance.x+_c)*global.blockSize*2.2, (instance.y+_r)*global.blockSize*2.2);
+						closestCell =  [(instance.x+_c)*global.blockSize*2.2, (instance.y+_r)*global.blockSize*2.2]
+					}
+				}
+			}
+		}
+		return closestCell;
 	}
 }
 
@@ -81,7 +99,7 @@ function Component(componentType, _object) constructor {
 			fuelCost = 1;
 			weight = 3;
 			activationKey[0] = $"{nonInertComponents}";
-			activationKey[1] = "r"
+			activationKey[1] = "R"
 			break;
 		case eComponentTypes.ARMOR:
 			weight = 2;
@@ -89,13 +107,13 @@ function Component(componentType, _object) constructor {
 		case eComponentTypes.MORTAR:
 			nonInertComponents++
 			activationKey[0] = $"{nonInertComponents}";
-			activationKey[1] = "t"
+			activationKey[1] = "T"
 			weight = 5;
 			fuelCost = 2;
 			break;
 		case eComponentTypes.WHEEL:
 			fuelCost = 1;
-			weight = 3;
+			weight = 1;
 			global.tank.wheelCount++;
 			break;	
 	}
@@ -117,18 +135,26 @@ function Component(componentType, _object) constructor {
 				draw_set_color(selected? c_red:c_lime)
 				draw_rectangle(instance.x+_c-global.blockSize, instance.y+_r-global.blockSize, instance.x+_c+global.blockSize, instance.y+_r+global.blockSize, true)
 				draw_triangle(instance.x+_c, instance.y+_r-global.blockSize, instance.x+_c-global.blockSize*0.7, instance.y+_r+global.blockSize*0.7, instance.x+_c+global.blockSize*0.7, instance.y+_r+global.blockSize*0.7,false);
+				if(targeting !=noone){
+					draw_set_color(c_maroon)
+					if(instance_exists(instance)){
+						draw_line(instance.x+_c, instance.y+_r, targeting.x, targeting.y)
+						draw_circle(targeting.x, targeting.y, 10, true);
+					}
+				}
 				break;
 			case eComponentTypes.MORTAR:
 				draw_set_color(selected? c_red:c_lime)
 				draw_rectangle(instance.x+_c-global.blockSize, instance.y+_r-global.blockSize, instance.x+_c+global.blockSize, instance.y+_r+global.blockSize, true)
 				draw_circle(instance.x+_c, instance.y+_r, global.blockSize, true)
+				if(targeting !=noone){
+					draw_set_color(c_maroon)
+					draw_line(instance.x+_c, instance.y+_r, targeting.x, targeting.y)
+					draw_circle(targeting.x, targeting.y, 10, true);
+				}
 				break;
 		}
-		if(targeting !=noone){
-			draw_set_color(c_maroon)
-			draw_line(instance.x+_c, instance.y+_r, targeting.x, targeting.y)
-			draw_circle(targeting.x, targeting.y, 1.5, true);
-		}
+
 	}
 	
 	
@@ -139,33 +165,32 @@ function Component(componentType, _object) constructor {
 	
 	function doActionOne() {
 		if(keyboard_check_pressed(ord(activationKey[0]))){
-			
-				selected = !selected;
-				if(targeting = noone){
-					targeting = instance_nearest(mouse_x, mouse_y, oEnemy)
-					return;
-				}
-			else{
-					actioning= 60;
-
-					if(type == eComponentTypes.MORTAR){
-						var _splashTargets = ds_list_create();
-						collision_rectangle_list(targeting.x-5, targeting.y-5, targeting.x+5, targeting.y+5, all, false, true, _splashTargets, true)
-						for(var _i = 0; _i < ds_list_size(_splashTargets); _i++){
-							instance_destroy(_splashTargets[|_i])
-						}
-					}else if(type == eComponentTypes.CHAINGUN){
-						instance_destroy(targeting);
-					}
-					//TODO: Explode Target
-				}
-				global.tank.useFuel(fuelCost);
-	
+			selected = true;
+			if(targeting = noone || instance_nearest(mouse_x, mouse_y, oEnemy) != targeting){
+				targeting = instance_nearest(mouse_x, mouse_y, oEnemy)
+				return
 			}
+		}
+		if(keyboard_check_released(ord(activationKey[0]))){
+			selected = false;
+		}
 	}
 	function doActionTwo(){
 		if(keyboard_check_pressed(ord(activationKey[1]))){
-			return 0;
+				actioning= 60;
+				if(type == eComponentTypes.MORTAR){
+					var _splashTargets = ds_list_create();
+					collision_rectangle_list(targeting.x-5, targeting.y-5, targeting.x+5, targeting.y+5, all, false, true, _splashTargets, true)
+					for(var _i = 0; _i < ds_list_size(_splashTargets); _i++){
+						instance_destroy(_splashTargets[|_i])
+					}
+					targeting = noone;
+				}else if(type == eComponentTypes.CHAINGUN){
+					instance_destroy(targeting);
+					targeting = noone;
+	
+				}
+				//TODO: Explode Target
 		}
 	}
 	
