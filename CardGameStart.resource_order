@@ -1,0 +1,23 @@
+{
+  "FolderOrderSettings": [],
+  "ResourceOrderSettings": [
+    {"name":"Sprite3","order":3,"path":"sprites/Sprite3/Sprite3.yy",},
+    {"name":"Click_Heavy_00","order":6,"path":"sounds/Click_Heavy_00/Click_Heavy_00.yy",},
+    {"name":"Click_Electronic_00","order":7,"path":"sounds/Click_Electronic_00/Click_Electronic_00.yy",},
+    {"name":"oEnemy","order":5,"path":"objects/oEnemy/oEnemy.yy",},
+    {"name":"spr_card","order":1,"path":"sprites/spr_card/spr_card.yy",},
+    {"name":"oTank","order":2,"path":"objects/oTank/oTank.yy",},
+    {"name":"oCard","order":1,"path":"objects/oCard/oCard.yy",},
+    {"name":"sndCardMove","order":1,"path":"sounds/sndCardMove/sndCardMove.yy",},
+    {"name":"oOutline","order":3,"path":"objects/oOutline/oOutline.yy",},
+    {"name":"spr_outline","order":2,"path":"sprites/spr_outline/spr_outline.yy",},
+    {"name":"Slide_Electronic_02","order":5,"path":"sounds/Slide_Electronic_02/Slide_Electronic_02.yy",},
+    {"name":"sndWin","order":2,"path":"sounds/sndWin/sndWin.yy",},
+    {"name":"scrTank","order":1,"path":"scripts/scrTank/scrTank.yy",},
+    {"name":"Click_Mechanical_00","order":3,"path":"sounds/Click_Mechanical_00/Click_Mechanical_00.yy",},
+    {"name":"rExplore","order":2,"path":"rooms/rExplore/rExplore.yy",},
+    {"name":"Click_Mechanical_01","order":4,"path":"sounds/Click_Mechanical_01/Click_Mechanical_01.yy",},
+    {"name":"oButton","order":4,"path":"objects/oButton/oButton.yy",},
+    {"name":"rBuild","order":1,"path":"rooms/rBuild/rBuild.yy",},
+  ],
+}
