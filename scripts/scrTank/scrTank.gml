@@ -60,14 +60,15 @@ function Tank(_obj) constructor{
 	}
 	
 	function getNearestCell(xpos, ypos){
-		var closestDistance = point_distance(xpos, ypos, instance.x*global.blockSize*2.2, instance.y*global.blockSize*2.2);
-		var closestCell = [0, 0]
+		var closestDistance = 999999
+		show_debug_message(closestDistance)
+		var closestCell = [3, 1]
 		for(var _r =0; _r<ds_grid_height(config); _r++){
 			for(var _c = 0; _c<ds_grid_width(config); _c++){
 				if(config[# _c, _r].type != eComponentTypes.EMPTY){
-					if(point_distance(xpos, ypos, instance.x*global.blockSize*2.2+_c, instance.y*global.blockSize*2.2+_r)<closestDistance){
-						closestDistance = point_distance(xpos, ypos, (instance.x+_c)*global.blockSize*2.2, (instance.y+_r)*global.blockSize*2.2);
-						closestCell =  [(instance.x+_c)*global.blockSize*2.2, (instance.y+_r)*global.blockSize*2.2]
+					if(point_distance(xpos, ypos, instance.x+_c, instance.y+_r)<closestDistance){
+						closestDistance = point_distance(xpos, ypos, (instance.x+_c), (instance.y+_r));
+						closestCell =  [instance.x+(_c*global.blockSize*2.2), instance.y+(_r*global.blockSize*2.2)]
 					}
 				}
 			}
@@ -176,11 +177,10 @@ function Component(componentType, _object) constructor {
 		}
 	}
 	function doActionTwo(){
-		if(keyboard_check_pressed(ord(activationKey[1]))){
-				actioning= 60;
+		if(keyboard_check_pressed(ord(activationKey[1])) && targeting!= noone){
 				if(type == eComponentTypes.MORTAR){
 					var _splashTargets = ds_list_create();
-					collision_rectangle_list(targeting.x-5, targeting.y-5, targeting.x+5, targeting.y+5, all, false, true, _splashTargets, true)
+					show_debug_message(collision_circle_list(targeting.x, targeting.y, 15, oEnemy, true, true, _splashTargets, false))
 					for(var _i = 0; _i < ds_list_size(_splashTargets); _i++){
 						instance_destroy(_splashTargets[|_i])
 					}
@@ -188,7 +188,6 @@ function Component(componentType, _object) constructor {
 				}else if(type == eComponentTypes.CHAINGUN){
 					instance_destroy(targeting);
 					targeting = noone;
-	
 				}
 				//TODO: Explode Target
 		}

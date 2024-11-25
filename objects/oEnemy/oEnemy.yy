@@ -28,8 +28,11 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": true,
+  "solid": false,
   "spriteId": null,
-  "spriteMaskId": null,
+  "spriteMaskId": {
+    "name": "sprCollisionEnemy",
+    "path": "sprites/sprCollisionEnemy/sprCollisionEnemy.yy",
+  },
   "visible": true,
 }
