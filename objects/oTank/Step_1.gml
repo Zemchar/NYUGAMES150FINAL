@@ -6,7 +6,7 @@ if(room == rBuild){
 }
 
 
-if(global.tank.gas > 0){
+if(ceil(global.tank.gas) > 0){
 	var _cX = (_movement[3] - _movement[0])*movSpeed;
 	var _cY = (_movement[2] - _movement[1])*movSpeed;
 	
@@ -16,7 +16,8 @@ if(global.tank.gas > 0){
 	}
 	if(collision_rectangle(x+_cX+global.tank.bounds[0], y+_cY+global.tank.bounds[1], x+_cX+global.tank.bounds[2], y+_cY+global.tank.bounds[3], all, true, true)==noone){
 		if(_cY != 0 || _cX != 0){
-			global.tank.gas--;
+			global.tank.gas-=abs(_cY)*0.001;
+			global.tank.gas-=abs(_cX)*0.001;
 			x+=_cX;
 			y+=_cY;
 			if(random(100) < 20){

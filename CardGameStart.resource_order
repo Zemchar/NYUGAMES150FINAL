@@ -7,6 +7,7 @@
     {"name":"oEnemy","order":5,"path":"objects/oEnemy/oEnemy.yy",},
     {"name":"spr_card","order":1,"path":"sprites/spr_card/spr_card.yy",},
     {"name":"oTank","order":2,"path":"objects/oTank/oTank.yy",},
+    {"name":"oComponent","order":6,"path":"objects/oComponent/oComponent.yy",},
     {"name":"oCard","order":1,"path":"objects/oCard/oCard.yy",},
     {"name":"sndCardMove","order":1,"path":"sounds/sndCardMove/sndCardMove.yy",},
     {"name":"oOutline","order":3,"path":"objects/oOutline/oOutline.yy",},

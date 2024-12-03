@@ -51,10 +51,10 @@ function Tank(_obj) constructor{
 	
 	function getMoveParams(){
 		var moveDirs = [
-		keyboard_check_pressed(ord("A"))*(wheelCount/weight), 
-		keyboard_check_pressed(ord("W"))*(wheelCount/weight),
-		keyboard_check_pressed(ord("S"))*(wheelCount/weight),
-		keyboard_check_pressed(ord("D"))*(wheelCount/weight)
+		keyboard_check(ord("A"))*(wheelCount/weight)*0.1, 
+		keyboard_check(ord("W"))*(wheelCount/weight)*0.1,
+		keyboard_check(ord("S"))*(wheelCount/weight)*0.1,
+		keyboard_check(ord("D"))*(wheelCount/weight)*0.1
 		]
 		return moveDirs
 	}
@@ -69,6 +69,22 @@ function Tank(_obj) constructor{
 					if(point_distance(xpos, ypos, instance.x+_c, instance.y+_r)<closestDistance){
 						closestDistance = point_distance(xpos, ypos, (instance.x+_c), (instance.y+_r));
 						closestCell =  [instance.x+(_c*global.blockSize*2.2), instance.y+(_r*global.blockSize*2.2)]
+					}
+				}
+			}
+		}
+		return closestCell;
+	}
+	function getNearestCellId(xpos, ypos){
+		var closestDistance = 999999
+		show_debug_message(closestDistance)
+		var closestCell = [3, 1]
+		for(var _r =0; _r<ds_grid_height(config); _r++){
+			for(var _c = 0; _c<ds_grid_width(config); _c++){
+				if(config[# _c, _r].type != eComponentTypes.EMPTY){
+					if(point_distance(xpos, ypos, instance.x+_c, instance.y+_r)<closestDistance){
+						closestDistance = point_distance(xpos, ypos, (instance.x+_c), (instance.y+_r));
+						closestCell =  [_c, _r]
 					}
 				}
 			}

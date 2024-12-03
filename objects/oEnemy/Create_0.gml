@@ -4,6 +4,7 @@ health = 3
 fadetime = 30;
 drop = eComponentTypes.EMPTY;
 state = eEnemyState.Attacking
+windUp = 100
 
 object_set_mask(oEnemy, sprCollisionEnemy)
 if(irandom(100) < 20){
@@ -27,7 +28,14 @@ function position(xpos, ypos) constructor{
 		return (x >= 0 && y >= 0);
 	}
 }
+
+function Stolen(pos = new position(-1, -1), comp= eComponentTypes.EMPTY) constructor {
+	grdPos = pos
+	component = comp
+
+}
 targetCelPos = new position(-1, -1)
+stolen = new Stolen();
 
 
 

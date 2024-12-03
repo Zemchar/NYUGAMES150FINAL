@@ -41,6 +41,7 @@
     {"id":{"name":"spr_card","path":"sprites/spr_card/spr_card.yy",},},
     {"id":{"name":"oTank","path":"objects/oTank/oTank.yy",},},
     {"id":{"name":"fntScore","path":"fonts/fntScore/fntScore.yy",},},
+    {"id":{"name":"oComponent","path":"objects/oComponent/oComponent.yy",},},
     {"id":{"name":"oCard","path":"objects/oCard/oCard.yy",},},
     {"id":{"name":"sndCardMove","path":"sounds/sndCardMove/sndCardMove.yy",},},
     {"id":{"name":"oOutline","path":"objects/oOutline/oOutline.yy",},},
