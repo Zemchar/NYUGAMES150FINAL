@@ -6,6 +6,7 @@ if(room == rBuild){
 }
 
 
+
 if(ceil(global.tank.gas) > 0){
 	var _cX = (_movement[3] - _movement[0])*movSpeed;
 	var _cY = (_movement[2] - _movement[1])*movSpeed;

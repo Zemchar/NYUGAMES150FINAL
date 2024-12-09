@@ -47,6 +47,7 @@ function Tank(_obj) constructor{
 	
 	function addComponent(componentType, _c, _r){
 		config[# _c, _r] = new Component(componentType, instance); 
+		calculateWeight();
 	}
 	
 	function getMoveParams(){
@@ -61,7 +62,7 @@ function Tank(_obj) constructor{
 	
 	function getNearestCell(xpos, ypos){
 		var closestDistance = 999999
-		show_debug_message(closestDistance)
+
 		var closestCell = [3, 1]
 		for(var _r =0; _r<ds_grid_height(config); _r++){
 			for(var _c = 0; _c<ds_grid_width(config); _c++){
@@ -77,7 +78,6 @@ function Tank(_obj) constructor{
 	}
 	function getNearestCellId(xpos, ypos){
 		var closestDistance = 999999
-		show_debug_message(closestDistance)
 		var closestCell = [3, 1]
 		for(var _r =0; _r<ds_grid_height(config); _r++){
 			for(var _c = 0; _c<ds_grid_width(config); _c++){
@@ -97,25 +97,26 @@ function Component(componentType, _object) constructor {
 	type = componentType; 
 	instance = _object
 	static nonInertComponents = 0;
+	static targetedEnemies = ds_list_create()
 	core = false;
 	weight = 0;
 	fuelCost = 0;
 	activationKey = ["", ""]
-	targeting = noone;
+	targeting = -4;
 	selected = false;
 	actioning = 0;
 	disabled = false;
 	projectileProgress = 0;
+	targeted = false;
 	switch(type){
 		case eComponentTypes.CORE:
 			core = true;
 			weight = 1;
 			break;
 		case eComponentTypes.CHAINGUN:
-			nonInertComponents++
 			fuelCost = 1;
 			weight = 3;
-			activationKey[0] = $"{nonInertComponents}";
+			activationKey[0] = $"Q";
 			activationKey[1] = "R"
 			break;
 		case eComponentTypes.ARMOR:
@@ -124,7 +125,7 @@ function Component(componentType, _object) constructor {
 		case eComponentTypes.MORTAR:
 			nonInertComponents++
 			activationKey[0] = $"{nonInertComponents}";
-			activationKey[1] = "T"
+			activationKey[1] = "F"
 			weight = 5;
 			fuelCost = 2;
 			break;
@@ -138,7 +139,7 @@ function Component(componentType, _object) constructor {
 	function draw(_c, _r){
 		_r *= global.blockSize*2.2
 		_c *= global.blockSize*2.2
-		draw_set_color(c_lime)
+		draw_set_color(targeted? c_orange: c_lime)
 		switch(type){
 			case eComponentTypes.CORE:
 				draw_set_color(c_yellow)
@@ -149,10 +150,10 @@ function Component(componentType, _object) constructor {
 				draw_circle(instance.x+_c, instance.y+_r, global.blockSize, false)
 				break;
 			case eComponentTypes.CHAINGUN:
-				draw_set_color(selected? c_red:c_lime)
+				if(selected) draw_set_color(c_red)
 				draw_rectangle(instance.x+_c-global.blockSize, instance.y+_r-global.blockSize, instance.x+_c+global.blockSize, instance.y+_r+global.blockSize, true)
 				draw_triangle(instance.x+_c, instance.y+_r-global.blockSize, instance.x+_c-global.blockSize*0.7, instance.y+_r+global.blockSize*0.7, instance.x+_c+global.blockSize*0.7, instance.y+_r+global.blockSize*0.7,false);
-				if(targeting !=noone){
+				if(instance_exists(targeting)){
 					draw_set_color(c_maroon)
 					if(instance_exists(instance)){
 						draw_line(instance.x+_c, instance.y+_r, targeting.x, targeting.y)
@@ -161,13 +162,13 @@ function Component(componentType, _object) constructor {
 				}
 				break;
 			case eComponentTypes.MORTAR:
-				draw_set_color(selected? c_red:c_lime)
+				if(selected) draw_set_color(c_red)
 				draw_rectangle(instance.x+_c-global.blockSize, instance.y+_r-global.blockSize, instance.x+_c+global.blockSize, instance.y+_r+global.blockSize, true)
 				draw_circle(instance.x+_c, instance.y+_r, global.blockSize, true)
-				if(targeting !=noone){
+				if(instance_exists(targeting)){
 					draw_set_color(c_maroon)
 					draw_line(instance.x+_c, instance.y+_r, targeting.x, targeting.y)
-					draw_circle(targeting.x, targeting.y, 10, true);
+					draw_circle(targeting.x, targeting.y, 80, true);
 				}
 				break;
 		}
@@ -175,37 +176,70 @@ function Component(componentType, _object) constructor {
 	}
 	
 	
-	function assignTarget(target){
-		targeting = target;
-		doActionOne();
+function doActionOne() {
+    if (keyboard_check_pressed(ord(activationKey[0])) && type == eComponentTypes.CHAINGUN) {
+        selected = true;
+
+        // Find the nearest enemy that's not already the current target
+        var minDistance = 1000000;
+        var nearestEnemy = noone;
+        for (var i = 0; i < instance_number(oEnemy); i++) {
+            var enemy = instance_find(oEnemy, i);
+            var dist = distanceToMouse(enemy)
+            if (dist < minDistance && enemy != targeting && enemy.targeted = false) {
+                minDistance = dist;
+                nearestEnemy = enemy;
+				enemy.targeted = true;
+				continue;
+            }
+			enemy.targeted = false;
+        }
+
+        // Update the target if a new nearest enemy is found
+        if (nearestEnemy != noone && distanceToMouse(nearestEnemy) < 1000) {
+            targeting = nearestEnemy;
+            ds_list_add(targetedEnemies, nearestEnemy);
+        }
+    }else if (type == eComponentTypes.MORTAR && keyboard_check_pressed(ord(activationKey[0]))){
+		targeting = new position(mouse_x, mouse_y)
 	}
+    else if (keyboard_check_released(ord(activationKey[0]))) {
+        selected = false;
+    }
+}
 	
-	function doActionOne() {
-		if(keyboard_check_pressed(ord(activationKey[0]))){
-			selected = true;
-			if(targeting = noone || instance_nearest(mouse_x, mouse_y, oEnemy) != targeting){
-				targeting = instance_nearest(mouse_x, mouse_y, oEnemy)
-				return
-			}
-		}
-		if(keyboard_check_released(ord(activationKey[0]))){
-			selected = false;
-		}
+	function distanceToMouse(objectInstance){
+		var _x = abs(mouse_x - objectInstance.x);
+		var _y = abs(objectInstance.y - mouse_y);
+		return(sqrt(sqr(_x) + sqr(_y)))
 	}
 	function doActionTwo(){
 		if(keyboard_check_pressed(ord(activationKey[1])) && targeting!= noone){
 				if(type == eComponentTypes.MORTAR){
-					var _splashTargets = ds_list_create();
-					show_debug_message(collision_circle_list(targeting.x, targeting.y, 15, oEnemy, true, true, _splashTargets, false))
-					for(var _i = 0; _i < ds_list_size(_splashTargets); _i++){
-						instance_destroy(_splashTargets[|_i])
-					}
-					targeting = noone;
+
+						oTank.mortarFireTimer = 120
+						oTank.mortarLandingSpot = new position(targeting.x, targeting.y)
+					
 				}else if(type == eComponentTypes.CHAINGUN){
-					instance_destroy(targeting);
+					instance_destroy(targeting)
 					targeting = noone;
 				}
-				//TODO: Explode Target
+		}
+		if(oTank.mortarFireTimer > 0 && oTank.mortarCooldown <= 0 && oTank.mortarLandingSpot.checkDefined() && type ==eComponentTypes.MORTAR){
+			oTank.mortarFireTimer--;
+		}if(oTank.mortarFireTimer == 0 && type == eComponentTypes.MORTAR){
+			var _splashTargets = ds_list_create();
+			part_particles_create(global.partSys, targeting.x, targeting.y, oTank.mortarfire, 80)
+			oTank.shakeScreen = 13;
+			oTank.alarm[0] = 1;
+			show_debug_message(collision_circle_list(targeting.x, targeting.y, 80, oEnemy, true, true, _splashTargets, false))
+			for(var _i = 0; _i < ds_list_size(_splashTargets); _i++){
+					
+				instance_destroy(_splashTargets[|_i])
+			}
+			targeting = noone;
+			oTank.mortarFireTimer = 160;
+			oTank.mortarLandingSpot = new position(-1, -1)
 		}
 	}
 	

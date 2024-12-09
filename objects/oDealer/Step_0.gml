@@ -44,7 +44,7 @@ if(actionTimer < actionSpeedBetween){
 					 if(place_meeting(placementGrid[# _c, _r].x, placementGrid[# _c, _r].y, oCard)){
 						 global.tank.addComponent(instance_place(placementGrid[# _c, _r].x, placementGrid[# _c, _r].y, oCard).faceIndex, _c, _r)
 					 }
-					 
+	
 				}
 			}
 			room_goto_next()
