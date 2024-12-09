@@ -25,7 +25,8 @@ part_type_direction(mortarfire, 0, 360, 0, 0);
 // The life is in frames/steps
 part_type_life(mortarfire, 30, 60);
 
-
+alarm[1] = 30;
+deathAnimation = 60;
 
 
 

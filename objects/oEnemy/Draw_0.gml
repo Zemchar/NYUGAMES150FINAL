@@ -5,7 +5,9 @@ if(fadetime <= -30){
 	fadetime = 30;
 }else{
 	draw_set_alpha(fadetime/30)
-	draw_circle_color(x, y, 10, c_red, c_red, false)
+	draw_set_color(stolen ? c_purple: c_red)
+	
+	draw_circle(x, y, 10, false)
 }
 
 

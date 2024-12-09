@@ -28,16 +28,16 @@ if(health >=1){
 					// kill player
 					break;
 				}
-				stolen = new Stolen(new position(global.tank.getNearestCell(x, y)[0], global.tank.getNearestCell(x, y)[1]),global.tank.config[# nearest[0], nearest[1]].type);
-	
+				stolen = new Stolen(new position(global.tank.getNearestCellId(x, y)[0], global.tank.getNearestCellId(x, y)[1]),global.tank.config[# nearest[0], nearest[1]].type);
+				
 				global.tank.addComponent( eComponentTypes.EMPTY, nearest[0], nearest[1])
 				state = eEnemyState.Running;
-				windUp = 100;
+				windUp = 120;
 				break;
 			}
 			break;
 		case eEnemyState.Running:
-			mp_potential_step(retreatTarget.x, retreatTarget.y, 3, false);
+			mp_potential_step(retreatTarget.x, retreatTarget.y, 2.5, false);
 			var cx = camera_get_view_x(view_camera[0]);
 			var cy = camera_get_view_y(view_camera[0]);
 

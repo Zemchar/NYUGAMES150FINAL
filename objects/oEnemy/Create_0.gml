@@ -37,6 +37,7 @@ enum eEnemyState{
 function Stolen(pos = new position(-1, -1), comp= eComponentTypes.EMPTY) constructor {
 	grdPos = pos
 	component = comp
+	
 
 }
 targetCelPos = new position(-1, -1)

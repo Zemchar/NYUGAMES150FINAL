@@ -7,7 +7,11 @@ if(drop != undefined){
 	
 }
 deathExplosion()
-oTank.vfxShakeScreen(3)
+with(oTank){
+	shakeScreen = 3;
+	alarm[0] = 1;
+	alarm[1] += 10
+}
 
 
 

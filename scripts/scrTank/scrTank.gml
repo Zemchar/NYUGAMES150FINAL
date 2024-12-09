@@ -117,7 +117,7 @@ function Component(componentType, _object) constructor {
 			fuelCost = 1;
 			weight = 3;
 			activationKey[0] = $"Q";
-			activationKey[1] = "R"
+			activationKey[1] = "E"
 			break;
 		case eComponentTypes.ARMOR:
 			weight = 2;
@@ -125,7 +125,7 @@ function Component(componentType, _object) constructor {
 		case eComponentTypes.MORTAR:
 			nonInertComponents++
 			activationKey[0] = $"{nonInertComponents}";
-			activationKey[1] = "F"
+			activationKey[1] = $"R"
 			weight = 5;
 			fuelCost = 2;
 			break;
@@ -181,10 +181,12 @@ function doActionOne() {
         selected = true;
 
         // Find the nearest enemy that's not already the current target
-        var minDistance = 1000000;
-        var nearestEnemy = noone;
+
+        var nearestEnemy = instance_nearest(mouse_x, mouse_y, oEnemy);
+		var minDistance = distanceToMouse(nearestEnemy)+300;
         for (var i = 0; i < instance_number(oEnemy); i++) {
             var enemy = instance_find(oEnemy, i);
+			if(!instance_exists(enemy)){continue;}
             var dist = distanceToMouse(enemy)
             if (dist < minDistance && enemy != targeting && enemy.targeted = false) {
                 minDistance = dist;
@@ -209,30 +211,31 @@ function doActionOne() {
 }
 	
 	function distanceToMouse(objectInstance){
-		var _x = abs(mouse_x - objectInstance.x);
-		var _y = abs(objectInstance.y - mouse_y);
+		var _x = abs(objectInstance.x-mouse_x);
+		var _y = abs(objectInstance.y-mouse_y);
 		return(sqrt(sqr(_x) + sqr(_y)))
 	}
 	function doActionTwo(){
 		if(keyboard_check_pressed(ord(activationKey[1])) && targeting!= noone){
 				if(type == eComponentTypes.MORTAR){
-
+					if(!oTank.mortarLandingSpot.checkDefined()){
 						oTank.mortarFireTimer = 120
 						oTank.mortarLandingSpot = new position(targeting.x, targeting.y)
-					
+						oTank.mortarCooldown = self;
+					}
 				}else if(type == eComponentTypes.CHAINGUN){
 					instance_destroy(targeting)
 					targeting = noone;
 				}
 		}
-		if(oTank.mortarFireTimer > 0 && oTank.mortarCooldown <= 0 && oTank.mortarLandingSpot.checkDefined() && type ==eComponentTypes.MORTAR){
+		if(oTank.mortarFireTimer > 0 && oTank.mortarLandingSpot.checkDefined() && type ==eComponentTypes.MORTAR){
 			oTank.mortarFireTimer--;
-		}if(oTank.mortarFireTimer == 0 && type == eComponentTypes.MORTAR){
+		}if(oTank.mortarFireTimer == 0 && type == eComponentTypes.MORTAR && oTank.mortarCooldown == self){
 			var _splashTargets = ds_list_create();
-			part_particles_create(global.partSys, targeting.x, targeting.y, oTank.mortarfire, 80)
+			part_particles_create(global.partSys, oTank.mortarLandingSpot.x, oTank.mortarLandingSpot.y, oTank.mortarfire, 80)
 			oTank.shakeScreen = 13;
 			oTank.alarm[0] = 1;
-			show_debug_message(collision_circle_list(targeting.x, targeting.y, 80, oEnemy, true, true, _splashTargets, false))
+			show_debug_message(collision_circle_list(oTank.mortarLandingSpot.x, oTank.mortarLandingSpot.y, 80, oEnemy, true, true, _splashTargets, false))
 			for(var _i = 0; _i < ds_list_size(_splashTargets); _i++){
 					
 				instance_destroy(_splashTargets[|_i])
@@ -240,6 +243,12 @@ function doActionOne() {
 			targeting = noone;
 			oTank.mortarFireTimer = 160;
 			oTank.mortarLandingSpot = new position(-1, -1)
+			oTank.mortarCooldown = undefined
+		}else if(oTank.mortarFireTimer == 160 && type == eComponentTypes.MORTAR && instance_exists(targeting)){
+			oTank.mortarCooldown = self
+			oTank.mortarLandingSpot = new position(targeting.x, targeting.y)
+		}else if(oTank.mortarFireTimer == 160 && type == eComponentTypes.MORTAR){
+			oTank.mortarFireTimer = -1;
 		}
 	}
 	

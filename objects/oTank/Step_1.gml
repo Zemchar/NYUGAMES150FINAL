@@ -29,7 +29,18 @@ if(ceil(global.tank.gas) > 0){
 		}
 	}
 }else{
-	room_goto(rBuild)
+	deathAnimation--;
+	if(deathAnimation > 0 && deathAnimation%3 == 0){
+		shakeScreen = 15;
+		alarm[0] = 1
+		instance_deactivate_layer("Enemies")
+		part_particles_create(global.partSys, x+random_range(0,100), y+random_range(0,100), oTank.mortarfire, 10)}
+	if(deathAnimation < -60){
+		shakeScreen = 5;
+		alarm[0] = -1;
+		room_goto(rBuild)
+	}
+	
 }
 
 
