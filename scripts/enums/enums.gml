@@ -12,3 +12,13 @@ function position(xpos, ypos) constructor{
 		return (x >= 0 && y >= 0);
 	}
 }
+
+function Card(cardFaceIndex) constructor{
+	fIndex = cardFaceIndex;
+	var _newCard;
+	_newCard = instance_create_layer(0,0, "Cards", oCard)
+	_newCard.faceIndex = cardFaceIndex; // wheel
+	_newCard.faceUp = false;
+	_newCard.inPlayerHand = false;
+	ds_list_add(global.playerCards, _newCard)
+}

@@ -1,5 +1,6 @@
 /// @description Insert description here
 // You can write your code in this editor
+
 if(actionTimer < actionSpeedBetween){
 	return actionTimer++;
 }else{
@@ -8,10 +9,10 @@ if(actionTimer < actionSpeedBetween){
 		case eDealerStates.Dealing:
 			//TODO: Pause between card dealing
 			var _playerNum = ds_list_size(playerHand)
-			if(_playerNum<6 && !ds_list_empty(deck)) {
+			if(_playerNum<6 && !ds_list_empty(global.playerCards)) {
 				audio_play_sound(Click_Electronic_00, 0, false)
-				var _dealtCard = deck[|ds_list_size(deck) - 1]
-				ds_list_delete(deck, ds_list_size(deck) - 1 )
+				var _dealtCard = global.playerCards[|ds_list_size(global.playerCards) - 1]
+				ds_list_delete(global.playerCards, ds_list_size(global.playerCards) - 1 )
 				ds_list_add(playerHand, _dealtCard)
 				var spaceNeeded = 0;
 				while(place_meeting(room_width/4+spaceNeeded*handSpaceBetween,room_height*0.88,oCard)){
@@ -33,7 +34,7 @@ if(actionTimer < actionSpeedBetween){
 			}
 			break;
 		case eDealerStates.Discarding:
-			var _disPlayerNum = numCards
+			var _disPlayerNum = global.numCards
 			playerChosenCard = undefined;
 			opponentChosenCard = undefined;
 			actionTimer = 10
@@ -43,6 +44,7 @@ if(actionTimer < actionSpeedBetween){
 
 					 if(place_meeting(placementGrid[# _c, _r].x, placementGrid[# _c, _r].y, oCard)){
 						 global.tank.addComponent(instance_place(placementGrid[# _c, _r].x, placementGrid[# _c, _r].y, oCard).faceIndex, _c, _r)
+						 
 					 }
 	
 				}

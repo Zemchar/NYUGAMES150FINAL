@@ -1,5 +1,8 @@
 global.tank = undefined;
 global.blockSize = 20
+global.playerCards = ds_list_create();
+global.numCards = 0;
+
 
 function Tank(_obj) constructor{
 	config = ds_grid_create(5, 3)
@@ -211,6 +214,7 @@ function doActionOne() {
 }
 	
 	function distanceToMouse(objectInstance){
+		if(!instance_exists(objectInstance)){return -1;}
 		var _x = abs(objectInstance.x-mouse_x);
 		var _y = abs(objectInstance.y-mouse_y);
 		return(sqrt(sqr(_x) + sqr(_y)))
@@ -225,19 +229,20 @@ function doActionOne() {
 					}
 				}else if(type == eComponentTypes.CHAINGUN){
 					instance_destroy(targeting)
+					global.tank.gas--;
 					targeting = noone;
 				}
 		}
 		if(oTank.mortarFireTimer > 0 && oTank.mortarLandingSpot.checkDefined() && type ==eComponentTypes.MORTAR){
 			oTank.mortarFireTimer--;
 		}if(oTank.mortarFireTimer == 0 && type == eComponentTypes.MORTAR && oTank.mortarCooldown == self){
+			global.tank.gas-=5;
 			var _splashTargets = ds_list_create();
 			part_particles_create(global.partSys, oTank.mortarLandingSpot.x, oTank.mortarLandingSpot.y, oTank.mortarfire, 80)
 			oTank.shakeScreen = 13;
 			oTank.alarm[0] = 1;
 			show_debug_message(collision_circle_list(oTank.mortarLandingSpot.x, oTank.mortarLandingSpot.y, 80, oEnemy, true, true, _splashTargets, false))
 			for(var _i = 0; _i < ds_list_size(_splashTargets); _i++){
-					
 				instance_destroy(_splashTargets[|_i])
 			}
 			targeting = noone;

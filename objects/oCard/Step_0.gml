@@ -1,7 +1,7 @@
 /// @description Insert description here
 // You can write your code in this editor
 // Check for mouse over
-if(frozen) return
+if(frozen || room != rBuild) return
 if(inPlayerHand && faceIndex == 1){
 	inPlayerHand = false;
 	xTarg = room_width/6+sprite_get_width(spr_outline)*2+35*2
@@ -35,6 +35,11 @@ if(oDealer.playerChosenCard == self && inPlayerHand == true && !mouse_check_butt
 		audio_play_sound(choose(Click_Mechanical_00, Click_Mechanical_01), 0, false)
 		show_debug_message(ds_list_find_index(oDealer.playerHand, id))
 		ds_list_delete(oDealer.playerHand, ds_list_find_index(oDealer.playerHand, id))
+	}if(place_meeting(x, y, oDeleteCard) && !place_meeting(x, y, oCard)){
+		oDealer.state = eDealerStates.Dealing;
+		ds_list_delete(oDealer.playerHand, ds_list_find_index(oDealer.playerHand, id))
+		ds_list_delete(global.playerCards, ds_list_find_index(global.playerCards, id))
+		instance_destroy()
 	}
 	held = false;
 	oDealer.playerChosenCard = undefined;

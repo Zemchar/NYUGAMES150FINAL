@@ -3,7 +3,9 @@
 if(stolen != undefined){
 	global.tank.addComponent(stolen.component, stolen.grdPos.x, stolen.grdPos.y);
 }
-if(drop != undefined){
+if(drop != undefined && drop != eComponentTypes.EMPTY){
+	var comp = instance_create_layer(x, y, "Instances", oComponent)
+	comp.image_index = drop;
 	
 }
 deathExplosion()
