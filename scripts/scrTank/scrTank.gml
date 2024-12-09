@@ -2,6 +2,7 @@ global.tank = undefined;
 global.blockSize = 20
 global.playerCards = ds_list_create();
 global.numCards = 0;
+global.levelObtainedCards = 0;
 
 
 function Tank(_obj) constructor{

@@ -21,10 +21,6 @@ if(ceil(global.tank.gas) > 0){
 			global.tank.gas-=abs(_cX)*0.001;
 			x+=_cX;
 			y+=_cY;
-			if(random(100) < 20){
-				audio_stop_sound(Slide_Electronic_02)
-				audio_play_sound(Slide_Electronic_02, 0, false)
-			}
 
 		}
 	}

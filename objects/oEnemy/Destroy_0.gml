@@ -11,8 +11,9 @@ if(drop != undefined && drop != eComponentTypes.EMPTY){
 deathExplosion()
 with(oTank){
 	shakeScreen = 3;
+	global.tank.gas+=0.5;
 	alarm[0] = 1;
-	alarm[1] += 10
+	alarm[1] += 30
 }
 
 

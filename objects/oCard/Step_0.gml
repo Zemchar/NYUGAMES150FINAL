@@ -4,9 +4,9 @@
 if(frozen || room != rBuild) return
 if(inPlayerHand && faceIndex == 1){
 	inPlayerHand = false;
-	xTarg = room_width/6+sprite_get_width(spr_outline)*2+35*2
-	yTarg = room_height/6+sprite_get_height(spr_outline)+30
-	instance_nearest(room_width/6+sprite_get_width(spr_outline)*2+35*2, room_height/6+sprite_get_height(spr_outline)+30, oOutline).visible = false
+	xTarg = room_width/6+sprite_get_width(spr_outline)*2+64*2
+	yTarg = room_height/6+sprite_get_height(spr_outline)+64
+	instance_nearest(room_width/6+sprite_get_width(spr_outline)*2+64*2, room_height/6+sprite_get_height(spr_outline)+64, oOutline).visible = false
 }
 if(inPlayerHand && 
 oDealer.state == eDealerStates.Waiting &&

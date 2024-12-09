@@ -6,6 +6,7 @@ global.tank ??= new Tank(self)
 movSpeed = 150
 global.tank.calculateWeight()
 global.partSys = part_system_create();
+
 mortarCooldown = -1;
 mortarLandingSpot = new position(-1, -1)
 mortarFireTimer = 60;
